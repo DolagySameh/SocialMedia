@@ -1,0 +1,23 @@
+<div class="bg-white rounded-xl shadow p-4 space-y-3">
+  <div class="flex items-center justify-between">
+    <h2 class="font-semibold">Suggested friends</h2>
+    <button (click)="load()" class="text-xs text-indigo-600">Refresh</button>
+  </div>
+
+  @if (loading()) { <div class="text-gray-500 text-sm">Loading...</div> }
+  @if (error()) { <div class="text-red-600 text-sm">{{ error() }}</div> }
+  @if (!loading() && !suggestions().length) { <div class="text-gray-500 text-sm">No suggestions right now.</div> }
+
+  <ul class="space-y-3">
+    @for (s of suggestions(); track s._id) {
+      <li class="flex items-center gap-3">
+        <img [src]="s.photo" class="w-10 h-10 rounded-full object-cover" />
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium truncate">{{ s.name }}</div>
+          <div class="text-xs text-gray-500 truncate">@{{ s.username }}</div>
+        </div>
+        <button (click)="follow(s)" class="text-xs px-2 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Follow</button>
+      </li>
+    }
+  </ul>
+</div>

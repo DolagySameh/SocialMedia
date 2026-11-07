@@ -1,11 +1,16 @@
 <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-200">
-  <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
     <a routerLink="/" class="text-xl font-bold text-indigo-600">Social</a>
     <nav class="flex items-center gap-4 text-sm">
       @if (auth.isAuthenticated()) {
+        <a routerLink="/notifications" class="relative hover:text-indigo-600">
+          🔔
+          @if (notifications.unreadCount() > 0) {
+            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5">{{ notifications.unreadCount() }}</span>
+          }
+        </a>
         <a routerLink="/" routerLinkActive="text-indigo-600" [routerLinkActiveOptions]="{exact:true}" class="hover:text-indigo-600">Home</a>
         <a routerLink="/profile" routerLinkActive="text-indigo-600" class="hover:text-indigo-600">Profile</a>
-        <a routerLink="/change-password" routerLinkActive="text-indigo-600" class="hover:text-indigo-600">Password</a>
         <button (click)="logout()" class="px-3 py-1.5 rounded-md bg-gray-100 hover:bg-gray-200">Logout</button>
       } @else {
         <a routerLink="/login" class="hover:text-indigo-600">Login</a>

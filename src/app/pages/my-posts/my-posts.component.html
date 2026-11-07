@@ -1,0 +1,11 @@
+<div class="space-y-4">
+  <div class="bg-white rounded-xl shadow p-4">
+    <h1 class="text-xl font-bold">My posts</h1>
+  </div>
+  @if (error()) { <div class="text-red-600 text-sm">{{ error() }}</div> }
+  @for (p of postsList(); track p._id) {
+    <app-post-card [post]="p" (deleted)="onDeleted($event)" (updated)="onUpdated($event)" />
+  }
+  @if (loading()) { <div class="text-center text-gray-500 py-4">Loading...</div> }
+  @if (!loading() && !postsList().length) { <div class="bg-white rounded-xl shadow p-6 text-center text-gray-500">You haven't posted yet.</div> }
+</div>

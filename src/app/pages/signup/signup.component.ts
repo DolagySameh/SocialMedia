@@ -44,7 +44,7 @@ export class SignupComponent {
     }).subscribe({
       next: () => {
         this.loading.set(false);
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         this.loading.set(false);

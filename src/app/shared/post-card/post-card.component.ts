@@ -21,6 +21,8 @@ export class PostCardComponent {
 
   readonly editing = signal(false);
   readonly saving = signal(false);
+  readonly liking = signal(false);
+  readonly bookmarking = signal(false);
   readonly error = signal<string | null>(null);
   editBody = '';
 
@@ -32,6 +34,11 @@ export class PostCardComponent {
 
   get postUser() {
     return typeof this.post.user === 'string' ? null : this.post.user;
+  }
+
+  get isLiked(): boolean {
+    const u = this.auth.currentUser();
+    return !!u && (this.post.likes ?? []).includes(u._id);
   }
 
   startEdit(): void {
@@ -51,7 +58,7 @@ export class PostCardComponent {
       next: (res) => {
         this.saving.set(false);
         this.editing.set(false);
-        this.updated.emit({ ...this.post, body: res.data.post.body });
+        this.updated.emit({ ...this.post, body: res.data.post.body, image: res.data.post.image ?? this.post.image });
       },
       error: (err) => {
         this.saving.set(false);
@@ -65,6 +72,37 @@ export class PostCardComponent {
     this.posts.delete(this.post._id).subscribe({
       next: () => this.deleted.emit(this.post._id),
       error: (err) => this.error.set(err?.error?.message ?? 'Delete failed')
+    });
+  }
+
+  toggleLike(): void {
+    if (this.liking()) return;
+    this.liking.set(true);
+    this.posts.like(this.post._id).subscribe({
+      next: (res) => {
+        this.liking.set(false);
+        const updated = res?.data?.post ?? this.post;
+        this.updated.emit({ ...this.post, likes: updated.likes ?? this.post.likes, likesCount: updated.likesCount ?? this.post.likesCount });
+      },
+      error: (err) => {
+        this.liking.set(false);
+        this.error.set(err?.error?.message ?? 'Like failed');
+      }
+    });
+  }
+
+  toggleBookmark(): void {
+    if (this.bookmarking()) return;
+    this.bookmarking.set(true);
+    this.posts.bookmark(this.post._id).subscribe({
+      next: (res) => {
+        this.bookmarking.set(false);
+        this.updated.emit({ ...this.post, bookmarked: res.data.bookmarked, bookmarksCount: res.data.bookmarksCount ?? this.post.bookmarksCount });
+      },
+      error: (err) => {
+        this.bookmarking.set(false);
+        this.error.set(err?.error?.message ?? 'Bookmark failed');
+      }
     });
   }
 }

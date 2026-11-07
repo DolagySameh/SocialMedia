@@ -28,9 +28,7 @@ export class AuthService {
     dateOfBirth: string;
     gender: string;
   }): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${API_BASE_URL}/users/signup`, payload).pipe(
-      tap((res) => this.persist(res))
-    );
+    return this.http.post<AuthResponse>(`${API_BASE_URL}/users/signup`, payload);
   }
 
   signin(payload: { email: string; password: string }): Observable<AuthResponse> {

@@ -1,4 +1,44 @@
 <app-navbar />
-<main class="min-h-screen bg-gray-50">
-  <router-outlet />
-</main>
+@if (auth.isAuthenticated()) {
+  <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <aside class="lg:col-span-3 space-y-4">
+      <nav class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 space-y-1">
+        <a routerLink="/" routerLinkActive="bg-indigo-50 text-indigo-600" [routerLinkActiveOptions]="{exact:true}" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-50">
+          <span>🏠</span> Home
+        </a>
+        <a routerLink="/community" routerLinkActive="bg-indigo-50 text-indigo-600" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-50">
+          <span>👥</span> Community
+        </a>
+        <a routerLink="/my-posts" routerLinkActive="bg-indigo-50 text-indigo-600" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-50">
+          <span>📝</span> My posts
+        </a>
+        <a routerLink="/saved" routerLinkActive="bg-indigo-50 text-indigo-600" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-50">
+          <span>🔖</span> Saved posts
+        </a>
+        <a routerLink="/notifications" routerLinkActive="bg-indigo-50 text-indigo-600" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-50">
+          <span>🔔</span> Notifications
+        </a>
+        <a routerLink="/profile" routerLinkActive="bg-indigo-50 text-indigo-600" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-50">
+          <span>👤</span> Profile
+        </a>
+        <a routerLink="/change-password" routerLinkActive="bg-indigo-50 text-indigo-600" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-50">
+          <span>🔒</span> Password
+        </a>
+      </nav>
+    </aside>
+
+    <main class="lg:col-span-6 space-y-4">
+      <router-outlet />
+    </main>
+
+    <aside class="lg:col-span-3 space-y-4 hidden lg:block">
+      <app-suggestions-aside />
+    </aside>
+  </div>
+} @else {
+  <main class="min-h-screen bg-gray-50">
+    <div class="max-w-md mx-auto px-4 py-10">
+      <router-outlet />
+    </div>
+  </main>
+}

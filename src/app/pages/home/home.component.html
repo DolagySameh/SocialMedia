@@ -1,6 +1,6 @@
-<div class="max-w-2xl mx-auto px-4 py-6 space-y-4">
-  <div class="bg-white rounded-xl shadow p-4">
-    <textarea [(ngModel)]="newBody" rows="3" placeholder="What's on your mind?" class="w-full border rounded-md px-3 py-2"></textarea>
+<div class="space-y-4">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+    <textarea [(ngModel)]="newBody" rows="3" placeholder="What's on your mind?" class="w-full border-0 focus:outline-none resize-none text-gray-800"></textarea>
     <div class="flex justify-end mt-2">
       <button (click)="createPost()" [disabled]="creating()" class="px-4 py-2 bg-indigo-600 text-white rounded-md disabled:opacity-50">
         {{ creating() ? 'Posting...' : 'Post' }}
@@ -8,21 +8,17 @@
     </div>
   </div>
 
-  @if (error()) {
-    <div class="text-red-600 text-sm">{{ error() }}</div>
-  }
+  @if (error()) { <div class="text-red-600 text-sm">{{ error() }}</div> }
 
   @for (p of postsList(); track p._id) {
     <app-post-card [post]="p" (deleted)="onDeleted($event)" (updated)="onUpdated($event)" />
   }
 
-  @if (loading()) {
-    <div class="text-center text-gray-500 py-4">Loading...</div>
-  }
-
+  @if (loading()) { <div class="text-center text-gray-500 py-4">Loading...</div> }
   @if (!loading() && hasMore() && postsList().length) {
-    <div class="text-center">
-      <button (click)="loadMore()" class="px-4 py-2 bg-gray-100 rounded-md">Load more</button>
-    </div>
+    <div class="text-center"><button (click)="loadMore()" class="px-4 py-2 bg-gray-100 rounded-md">Load more</button></div>
+  }
+  @if (!loading() && !postsList().length) {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center text-gray-500">No posts yet. Be the first to share something!</div>
   }
 </div>

@@ -1,5 +1,5 @@
-<div class="max-w-2xl mx-auto px-4 py-6 space-y-4">
-  <a routerLink="/" class="text-indigo-600 text-sm">← Back</a>
+<div class="space-y-4">
+  <a routerLink="/" class="text-indigo-600 text-sm">← Back to feed</a>
 
   @if (loading()) {
     <div class="text-center text-gray-500 py-4">Loading...</div>
@@ -9,47 +9,45 @@
     <app-post-card [post]="post()!" (deleted)="onPostDeleted()" (updated)="onPostUpdated($event)" />
   }
 
-  <section class="bg-white rounded-xl shadow p-4 space-y-3">
+  <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 space-y-3">
     <h2 class="font-semibold">Comments</h2>
-    @if (commentError()) {
-      <div class="text-red-600 text-sm">{{ commentError() }}</div>
-    }
+    @if (commentError()) { <div class="text-red-600 text-sm">{{ commentError() }}</div> }
     <div class="flex gap-2">
       <input [(ngModel)]="newComment" placeholder="Write a comment..." class="flex-1 border rounded-md px-3 py-2" />
       <button (click)="createComment()" [disabled]="creatingComment()" class="px-4 py-2 bg-indigo-600 text-white rounded-md disabled:opacity-50">Send</button>
     </div>
 
-    @if (commentsLoading()) {
-      <div class="text-gray-500 text-sm">Loading comments...</div>
-    }
+    @if (commentsLoading()) { <div class="text-gray-500 text-sm">Loading comments...</div> }
 
-    @for (c of commentsList(); track c._id) {
-      <div class="border-t pt-3 space-y-1">
-        <div class="flex items-center gap-2">
-          <img [src]="c.commentCreator.photo" class="w-8 h-8 rounded-full object-cover" />
-          <div class="text-sm">
-            <span class="font-semibold">{{ c.commentCreator.name }}</span>
-            <span class="text-gray-500 ml-1">@{{ c.commentCreator.username }}</span>
-          </div>
-          <span class="ml-auto text-xs text-gray-400">{{ c.createdAt | date:'short' }}</span>
-        </div>
-
-        @if (editingCommentId() === c._id) {
-          <textarea [(ngModel)]="editCommentBody" rows="2" class="w-full border rounded-md px-3 py-2"></textarea>
-          <div class="flex gap-2">
-            <button (click)="saveEdit(c)" class="px-3 py-1 bg-indigo-600 text-white rounded-md text-sm">Save</button>
-            <button (click)="cancelEdit()" class="px-3 py-1 bg-gray-100 rounded-md text-sm">Cancel</button>
-          </div>
-        } @else {
-          <p class="text-sm whitespace-pre-wrap">{{ c.content }}</p>
-          @if (isCommentOwner(c)) {
-            <div class="flex gap-3 text-xs">
-              <button (click)="startEdit(c)" class="text-indigo-600">Edit</button>
-              <button (click)="deleteComment(c)" class="text-red-600">Delete</button>
+    <div class="space-y-3">
+      @for (c of commentsList(); track c._id) {
+        <div class="border-t pt-3 space-y-1">
+          <div class="flex items-center gap-2">
+            <img [src]="c.commentCreator.photo" class="w-8 h-8 rounded-full object-cover" />
+            <div class="text-sm">
+              <span class="font-semibold">{{ c.commentCreator.name }}</span>
+              <span class="text-gray-500 ml-1">@{{ c.commentCreator.username }}</span>
             </div>
+            <span class="ml-auto text-xs text-gray-400">{{ c.createdAt | date:'short' }}</span>
+          </div>
+
+          @if (editingCommentId() === c._id) {
+            <textarea [(ngModel)]="editCommentBody" rows="2" class="w-full border rounded-md px-3 py-2"></textarea>
+            <div class="flex gap-2">
+              <button (click)="saveEdit(c)" class="px-3 py-1 bg-indigo-600 text-white rounded-md text-sm">Save</button>
+              <button (click)="cancelEdit()" class="px-3 py-1 bg-gray-100 rounded-md text-sm">Cancel</button>
+            </div>
+          } @else {
+            <p class="text-sm whitespace-pre-wrap">{{ c.content }}</p>
+            @if (isCommentOwner(c)) {
+              <div class="flex gap-3 text-xs">
+                <button (click)="startEdit(c)" class="text-indigo-600">Edit</button>
+                <button (click)="deleteComment(c)" class="text-red-600">Delete</button>
+              </div>
+            }
           }
-        }
-      </div>
-    }
+        </div>
+      }
+    </div>
   </section>
 </div>

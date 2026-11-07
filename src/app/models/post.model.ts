@@ -22,6 +22,7 @@ export interface Post {
   sharesCount?: number;
   isShare?: boolean;
   bookmarked?: boolean;
+  bookmarksCount?: number;
   createdAt: string;
 }
 

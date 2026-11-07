@@ -58,4 +58,19 @@ export class PostsService {
   delete(id: string): Observable<any> {
     return this.http.delete(`${API_BASE_URL}/posts/${id}`);
   }
+
+  like(id: string): Observable<any> {
+    return this.http.put(`${API_BASE_URL}/posts/${id}/like`, {});
+  }
+
+  bookmark(id: string): Observable<{ success: boolean; data: { bookmarked: boolean; bookmarksCount?: number } }> {
+    return this.http.put<{ success: boolean; data: { bookmarked: boolean; bookmarksCount?: number } }>(`${API_BASE_URL}/posts/${id}/bookmark`, {});
+  }
+
+  getSaved(params?: { page?: number; limit?: number }): Observable<any> {
+    let p = new HttpParams();
+    if (params?.page) p = p.set('page', params.page);
+    if (params?.limit) p = p.set('limit', params.limit);
+    return this.http.get<any>(`${API_BASE_URL}/users/bookmarks`, { params: p });
+  }
 }
